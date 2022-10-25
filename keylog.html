@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS PHP Keylogger</title>
+    <script>
+        var keylog = {
+            //PROPERTIES
+            cache : [], // TEMP ARRAY TO STORE KEY STROKES
+
+
+            init : function (){
+                //LISTEN TO  ALL KEY PRESSES, STORE INTO ARRAY
+                window.addEventListener("keydown", function(evt){
+                keylog.cache.push(evt.key);
+                console.log(keylog.cache);
+                });
+            }
+        };
+        window.addEventListener("DOMContentLoaded", keylog.init)
+    </script>
+</head>
+<body>
+    <h1>All key presses will be recorded!</h1>
+    <textarea></textarea>
+</body>
+</html>
